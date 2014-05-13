@@ -1,0 +1,484 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C1BEB9E16E2646BAB299FD35 /* libPods-DTStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA34ED06BA64030AA1AF07E /* libPods-DTStorage.a */; };
+		D97871DC19206ACE00D280B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D97871DB19206ACE00D280B4 /* Foundation.framework */; };
+		D97871E119206ACE00D280B4 /* DTStorage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D97871E019206ACE00D280B4 /* DTStorage.h */; };
+		D97871EA19206ACE00D280B4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D97871E919206ACE00D280B4 /* XCTest.framework */; };
+		D97871EB19206ACE00D280B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D97871DB19206ACE00D280B4 /* Foundation.framework */; };
+		D97871ED19206ACE00D280B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D97871EC19206ACE00D280B4 /* UIKit.framework */; };
+		D97871F019206ACE00D280B4 /* libDTStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D97871D819206ACE00D280B4 /* libDTStorage.a */; };
+		D97871F619206ACE00D280B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D97871F419206ACE00D280B4 /* InfoPlist.strings */; };
+		D97871F819206ACE00D280B4 /* DTStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D97871F719206ACE00D280B4 /* DTStorageTests.m */; };
+		D978720319206B4D00D280B4 /* DTSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D978720219206B4D00D280B4 /* DTSManager.m */; };
+		D978720619206B7F00D280B4 /* DTSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D978720519206B7F00D280B4 /* DTSObject.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D97871EE19206ACE00D280B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D97871D019206ACE00D280B4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D97871D719206ACE00D280B4;
+			remoteInfo = DTStorage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D97871D619206ACE00D280B4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				D97871E119206ACE00D280B4 /* DTStorage.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTStorage.xcconfig"; path = "Pods/Pods-DTStorage.xcconfig"; sourceTree = "<group>"; };
+		2634738AAD9C4FC6B270E50F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBA34ED06BA64030AA1AF07E /* libPods-DTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DTStorage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97871D819206ACE00D280B4 /* libDTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDTStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97871DB19206ACE00D280B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D97871DF19206ACE00D280B4 /* DTStorage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "DTStorage-Prefix.pch"; path = "Supporting Files/DTStorage-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		D97871E019206ACE00D280B4 /* DTStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTStorage.h; sourceTree = "<group>"; };
+		D97871E819206ACE00D280B4 /* DTStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DTStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97871E919206ACE00D280B4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		D97871EC19206ACE00D280B4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		D97871F319206ACE00D280B4 /* DTStorageTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DTStorageTests-Info.plist"; sourceTree = "<group>"; };
+		D97871F519206ACE00D280B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D97871F719206ACE00D280B4 /* DTStorageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DTStorageTests.m; sourceTree = "<group>"; };
+		D978720119206B4D00D280B4 /* DTSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTSManager.h; sourceTree = "<group>"; };
+		D978720219206B4D00D280B4 /* DTSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTSManager.m; sourceTree = "<group>"; };
+		D978720419206B7F00D280B4 /* DTSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTSObject.h; sourceTree = "<group>"; };
+		D978720519206B7F00D280B4 /* DTSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTSObject.m; sourceTree = "<group>"; };
+		D978720719206BD900D280B4 /* DTSManager_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTSManager_Private.h; sourceTree = "<group>"; };
+		D9A256141921C15700CBEB39 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D97871D519206ACE00D280B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97871DC19206ACE00D280B4 /* Foundation.framework in Frameworks */,
+				C1BEB9E16E2646BAB299FD35 /* libPods-DTStorage.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97871E519206ACE00D280B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97871EA19206ACE00D280B4 /* XCTest.framework in Frameworks */,
+				D97871F019206ACE00D280B4 /* libDTStorage.a in Frameworks */,
+				D97871ED19206ACE00D280B4 /* UIKit.framework in Frameworks */,
+				D97871EB19206ACE00D280B4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D97871CF19206ACE00D280B4 = {
+			isa = PBXGroup;
+			children = (
+				D97871DD19206ACE00D280B4 /* DTStorage */,
+				D97871DE19206ACE00D280B4 /* Supporting Files */,
+				D97871F119206ACE00D280B4 /* DTStorageTests */,
+				D97871DA19206ACE00D280B4 /* Frameworks */,
+				D97871D919206ACE00D280B4 /* Products */,
+				0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		D97871D919206ACE00D280B4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D97871D819206ACE00D280B4 /* libDTStorage.a */,
+				D97871E819206ACE00D280B4 /* DTStorageTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D97871DA19206ACE00D280B4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D9A256141921C15700CBEB39 /* libsqlite3.dylib */,
+				D97871DB19206ACE00D280B4 /* Foundation.framework */,
+				D97871E919206ACE00D280B4 /* XCTest.framework */,
+				D97871EC19206ACE00D280B4 /* UIKit.framework */,
+				2634738AAD9C4FC6B270E50F /* libPods.a */,
+				BBA34ED06BA64030AA1AF07E /* libPods-DTStorage.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D97871DD19206ACE00D280B4 /* DTStorage */ = {
+			isa = PBXGroup;
+			children = (
+				D97871E019206ACE00D280B4 /* DTStorage.h */,
+				D978720119206B4D00D280B4 /* DTSManager.h */,
+				D978720719206BD900D280B4 /* DTSManager_Private.h */,
+				D978720219206B4D00D280B4 /* DTSManager.m */,
+				D978720419206B7F00D280B4 /* DTSObject.h */,
+				D978720519206B7F00D280B4 /* DTSObject.m */,
+			);
+			path = DTStorage;
+			sourceTree = "<group>";
+		};
+		D97871DE19206ACE00D280B4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D97871DF19206ACE00D280B4 /* DTStorage-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			path = DTStorage;
+			sourceTree = "<group>";
+		};
+		D97871F119206ACE00D280B4 /* DTStorageTests */ = {
+			isa = PBXGroup;
+			children = (
+				D97871F719206ACE00D280B4 /* DTStorageTests.m */,
+				D97871F219206ACE00D280B4 /* Supporting Files */,
+			);
+			path = DTStorageTests;
+			sourceTree = "<group>";
+		};
+		D97871F219206ACE00D280B4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D97871F319206ACE00D280B4 /* DTStorageTests-Info.plist */,
+				D97871F419206ACE00D280B4 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D97871D719206ACE00D280B4 /* DTStorage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D97871FB19206ACE00D280B4 /* Build configuration list for PBXNativeTarget "DTStorage" */;
+			buildPhases = (
+				CCEACB5D55FE4034B9346BB4 /* Check Pods Manifest.lock */,
+				D97871D419206ACE00D280B4 /* Sources */,
+				D97871D519206ACE00D280B4 /* Frameworks */,
+				D97871D619206ACE00D280B4 /* CopyFiles */,
+				EB1439E48FF54E4E8F3727CB /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DTStorage;
+			productName = DTStorage;
+			productReference = D97871D819206ACE00D280B4 /* libDTStorage.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		D97871E719206ACE00D280B4 /* DTStorageTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D97871FE19206ACE00D280B4 /* Build configuration list for PBXNativeTarget "DTStorageTests" */;
+			buildPhases = (
+				D97871E419206ACE00D280B4 /* Sources */,
+				D97871E519206ACE00D280B4 /* Frameworks */,
+				D97871E619206ACE00D280B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D97871EF19206ACE00D280B4 /* PBXTargetDependency */,
+			);
+			name = DTStorageTests;
+			productName = DTStorageTests;
+			productReference = D97871E819206ACE00D280B4 /* DTStorageTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D97871D019206ACE00D280B4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Diogo Tridapalli";
+			};
+			buildConfigurationList = D97871D319206ACE00D280B4 /* Build configuration list for PBXProject "DTStorage" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D97871CF19206ACE00D280B4;
+			productRefGroup = D97871D919206ACE00D280B4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D97871D719206ACE00D280B4 /* DTStorage */,
+				D97871E719206ACE00D280B4 /* DTStorageTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D97871E619206ACE00D280B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97871F619206ACE00D280B4 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CCEACB5D55FE4034B9346BB4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EB1439E48FF54E4E8F3727CB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-DTStorage-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D97871D419206ACE00D280B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D978720619206B7F00D280B4 /* DTSObject.m in Sources */,
+				D978720319206B4D00D280B4 /* DTSManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97871E419206ACE00D280B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97871F819206ACE00D280B4 /* DTStorageTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D97871EF19206ACE00D280B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D97871D719206ACE00D280B4 /* DTStorage */;
+			targetProxy = D97871EE19206ACE00D280B4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D97871F419206ACE00D280B4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D97871F519206ACE00D280B4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D97871F919206ACE00D280B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		D97871FA19206ACE00D280B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D97871FC19206ACE00D280B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			buildSettings = {
+				DSTROOT = /tmp/DTStorage.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Supporting Files/DTStorage-Prefix.pch";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D97871FD19206ACE00D280B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			buildSettings = {
+				DSTROOT = /tmp/DTStorage.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Supporting Files/DTStorage-Prefix.pch";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		D97871FF19206ACE00D280B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Supporting Files/DTStorage-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "DTStorageTests/DTStorageTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		D978720019206ACE00D280B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Supporting Files/DTStorage-Prefix.pch";
+				INFOPLIST_FILE = "DTStorageTests/DTStorageTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D97871D319206ACE00D280B4 /* Build configuration list for PBXProject "DTStorage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D97871F919206ACE00D280B4 /* Debug */,
+				D97871FA19206ACE00D280B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D97871FB19206ACE00D280B4 /* Build configuration list for PBXNativeTarget "DTStorage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D97871FC19206ACE00D280B4 /* Debug */,
+				D97871FD19206ACE00D280B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D97871FE19206ACE00D280B4 /* Build configuration list for PBXNativeTarget "DTStorageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D97871FF19206ACE00D280B4 /* Debug */,
+				D978720019206ACE00D280B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D97871D019206ACE00D280B4 /* Project object */;
+}
