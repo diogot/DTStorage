@@ -15,12 +15,6 @@
 @property (nonatomic, strong) FMDatabase *db;
 @property (nonatomic, strong) NSString *dbFilePath;
 
-- (instancetype)initWithDbPath:(NSString *)dbFilePath;
-- (instancetype)initWithDBPath:(NSString *)dbFilePath
-                managedObjects:(NSDictionary *)managedObject
-      customTypesSerialization:(NSDictionary *)typesSerializations
-    customTypesDeserialization:(NSDictionary *)typesDeserializations;
-
 - (NSError *)insertObject:(id)object
                     table:(NSString *)table
                properties:(NSDictionary *)properties;

@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Diogo Tridapalli. All rights reserved.
 //
 
-#import "DTSObject.h"
+#import "DTSObject_Private.h"
 #import "DTSManager.h"
 
 
 NSString * const DTSObjectIdKey = @"objectId";
 
-static DTSManager *DBManager;
+static DTSManager *DBManager = nil;
 
 static DTSManager * GetDBManager()
 {
@@ -30,13 +30,44 @@ static void SetDBManager(DTSManager *dbManager)
 
 @interface DTSObject ()
 
-@property (nonatomic, strong) DTSManager *dbManager;
 @property (nonatomic, readwrite, strong) NSNumber *objectId;
 
 @end
 
 
 @implementation DTSObject
+
+
+#pragma mark - NSObject
+
+
+// Need to Xcode don't complain about
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
+
+#pragma mark - Private Methods
+
++ (DTSManager *)dbManager
+{
+    return GetDBManager();
+}
+
++ (void)setDbManager:(DTSManager *)manager
+{
+    SetDBManager(manager);
+}
+
+
+#pragma mark - Public Methods
+
 + (NSDictionary *)propertiesTypes
 {
     [self undefinedPropertiesTypesException];
@@ -46,39 +77,28 @@ static void SetDBManager(DTSManager *dbManager)
 
 + (void)undefinedPropertiesTypesException
 {
+    //  TODO: extract this strings to simbols
     [NSException raise:@"DTSObjectUndefinedPropertiesTypes"
                 format:@"DTSObject propertiesTypes has zero types."];
 }
 
-
-- (instancetype)init
++ (NSString *)tableName
 {
-    self = [super init];
+    //  TODO: extract this strings to simbols
+    [NSException raise:@"DTSObjectUndefinedTableName"
+                format:@"DTSObject tableName not defined."];
     
-    if (self) {
-        
-    }
-    
-    return self;
+    return nil;
 }
 
 - (void)save
 {
-    [self.dbManager saveObject:self];
+    [[DTSObject dbManager] saveObject:self];
 }
 
 - (void)delete
 {
-    [self.dbManager deleteObject:self];
-}
-
-- (DTSManager *)dbManager
-{
-    if (_dbManager == nil) {
-        _dbManager = GetDBManager();
-    }
-    
-    return _dbManager;
+    [[DTSObject dbManager] deleteObject:self];
 }
 
 + (instancetype)newObjectWithId:(NSNumber *)objectId
@@ -88,15 +108,15 @@ static void SetDBManager(DTSManager *dbManager)
         return nil;
     }
     
-    id object = [GetDBManager() newObjectWithId:objectId
-                                    objectClass:[self class]];
+    id object = [[DTSObject dbManager] newObjectWithId:objectId
+                                           objectClass:[self class]];
     
     return object;
 }
 
 + (NSArray *)arrayWithObjectIds
 {
-    NSArray *array = [GetDBManager() arrayWithIdsFromClass:self];
+    NSArray *array = [[DTSObject dbManager] arrayWithIdsFromClass:self];
     
     return array;
 }
@@ -106,9 +126,10 @@ static void SetDBManager(DTSManager *dbManager)
 {
     NSString *desc;
     
-    desc = [NSString stringWithFormat:@"<%@: %p; %@>",
+    desc = [NSString stringWithFormat:@"<%@: %p; objectId: %@; %@>",
             NSStringFromClass([self class]),
             self,
+            self.objectId,
             [self description]];
     
     return desc;

@@ -7,7 +7,7 @@
 //
 
 #import "DTSManager_Private.h"
-#import "DTSObject.h"
+#import "DTSObject_Private.h"
 #import <FMDB.h>
 #import <TTTArrayFormatter.h>
 
@@ -27,10 +27,10 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
 @property (nonatomic, strong) TTTArrayFormatter *arrayFormatterComma;
 @property (nonatomic, strong) TTTArrayFormatter *arrayFormatterAND;
 
-@property (nonatomic, strong) NSDictionary *managedObjects;
+@property (nonatomic, strong, readonly) NSMutableDictionary *managedClasses;
 
-@property (nonatomic, strong) NSDictionary *typesBlockIn;
-@property (nonatomic, strong) NSDictionary *typesBlockOut;
+@property (nonatomic, strong, readonly) NSMutableDictionary *typesBlockIn;
+@property (nonatomic, strong, readonly) NSMutableDictionary *typesBlockOut;
 
 @end
 
@@ -41,7 +41,63 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
 
 - (instancetype)init
 {
-    return [self initWithDbPath:@""];
+    self = [super init];
+    if (self) {
+        _arrayFormatterComma = [TTTArrayFormatter new];
+        _arrayFormatterComma.arrayStyle = TTTArrayFormatterDataStyle;
+        _arrayFormatterComma.separator = @" ";
+        _arrayFormatterComma.delimiter = @",";
+        _arrayFormatterComma.conjunction = @"";
+        _arrayFormatterComma.abbreviatedConjunction = @"";
+        _arrayFormatterAND = [TTTArrayFormatter new];
+        _arrayFormatterAND.arrayStyle = TTTArrayFormatterDataStyle;
+        _arrayFormatterAND.separator = @" ";
+        _arrayFormatterAND.delimiter = @" AND ";
+        _arrayFormatterAND.conjunction = @"";
+        _arrayFormatterAND.abbreviatedConjunction = @"";
+        _dbFilePath = nil;
+
+        _typesBlockIn = [NSMutableDictionary dictionaryWithCapacity:10];
+        _typesBlockOut = [NSMutableDictionary dictionaryWithCapacity:10];
+        
+        _managedClasses = [NSMutableDictionary dictionaryWithCapacity:5];
+        
+        [self loadDefaultTypes];
+    }
+    
+    return self;
+}
+
+- (void)loadDefaultTypes
+{
+    // NSDate
+    [self addSerializationBlock:^(NSString *key, id object, NSMutableDictionary *parameters) {
+        NSDate *date = [object valueForKey:key];
+        if (date) {
+            [parameters setObject:@([date timeIntervalSince1970])
+                           forKey:key];
+        }
+    } deserializationBlock:^(NSString *key, FMResultSet *rs, id object) {
+        if ([rs columnIsNull:key] == NO) {
+            id value = [rs dateForColumn:key];
+            [object setValue:value forKey:key];
+        }
+    } forClass:[NSDate class]];
+    
+    // NSURL
+    [self addSerializationBlock:^(NSString *key, id object, NSMutableDictionary *parameters) {
+        NSURL *url = [object valueForKey:key];
+        if (url) {
+            [parameters setObject:[url absoluteString] forKey:key];
+        }
+    } deserializationBlock:^(NSString *key, FMResultSet *rs, id object) {
+        if ([rs columnIsNull:key] == NO) {
+            NSURL *url = [NSURL URLWithString:[rs stringForColumn:key]];
+            if (url) {
+                [object setValue:url forKeyPath:key];
+            }
+        }
+    } forClass:[NSURL class]];
 }
 
 #pragma mark - Public Methods
@@ -57,299 +113,38 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     return manager;
 }
 
-- (void)saveObject:(DTSObject *)object
+- (void)addSerializationBlock:(DTSManagerTypeSerializationBlock)sBlock
+         deserializationBlock:(DTSManagerTypeDeserializationBlock)dBlock
+                     forClass:(Class)class
 {
-    if (object == nil) {
-        NSLog(@"Unable to save a nil object");
-        return;
-    }
+    NSParameterAssert(sBlock);
+    NSParameterAssert(dBlock);
+    NSParameterAssert(class);
     
-    NSNumber *objectId = object.objectId;
-    
-    NSString *className = NSStringFromClass([object class]);
-    NSDictionary *objectDetails = self.managedObjects[className];
-    if ([objectDetails count] == 0) {
-        NSLog(@"Unable to save an object of a class not managed");
-        return;
-    }
-    
-    NSString *tableName = objectDetails[TableNameKey];
-    if ([tableName length] == 0) {
-        NSLog(@"Unable to save an object that don't have a table name");
-        return;
-    }
-    
-    NSDictionary *properties = objectDetails[PropertiesKey];
-    if ([properties count] == 0) {
-        NSLog(@"Unable to save an object that don't have properties");
-        return;
-    }
-    
-    if (objectId) {
-        NSDictionary *where = @{DTSObjectIdKey: objectId};
-        NSError *error = [self updateObject:object
-                                      table:tableName
-                                      where:where
-                                 properties:properties];
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    } else {
-        NSError *error = [self insertObject:object
-                                      table:tableName
-                                 properties:properties];
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }
-}
-
-- (id)newObjectWithId:(NSNumber *)objectId objectClass:(Class)class
-{
-    if (objectId == nil) {
-        NSLog(@"Unable to load an object without objectId");
-        return nil;
-    }
-    
-    if (class == nil) {
-        NSLog(@"Unable to load an object without the class");
-        return nil;
-    }
     
     NSString *className = NSStringFromClass(class);
-    NSDictionary *objectDetails = self.managedObjects[className];
-    if ([objectDetails count] == 0) {
-        NSLog(@"Unable to load an object of a class not managed");
-        return nil;
-    }
     
-    NSString *tableName = objectDetails[TableNameKey];
-    if ([tableName length] == 0) {
-        NSLog(@"Unable to load an object that don't have a table name");
-        return nil;
-    }
-    
-    NSDictionary *properties = objectDetails[PropertiesKey];
-    if ([properties count] == 0) {
-        NSLog(@"Unable to load an object that don't have properties");
-        return nil;
-    }
-    
-    NSString *query;
-    query = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = (?)",
-             tableName, DTSObjectIdKey];
-    
-    id object = nil;
-    
-    FMResultSet *rs = [self.db executeQuery:query, objectId];
-    
-    if ([rs next]) {
-        object = [self newObjectOfClass:class
-                                withRow:rs
-                             properties:properties];
-        [object setValue:objectId forKey:DTSObjectIdKey];
-    }
-    
-    if (object == nil) {
-        NSLog(@"Object %@ with %@ = %@ not found",
-               className, DTSObjectIdKey, objectId);
-    }
-    
-    return object;
+    self.typesBlockIn[className] = sBlock;
+    self.typesBlockOut[className] = dBlock;
 }
 
-- (void)deleteObject:(DTSObject *)object
+- (void)addManagedClass:(Class)class
 {
-    if (object == nil) {
-        NSLog(@"Unable to delete a nil object");
-        return;
-    }
-    
-    NSString *className = NSStringFromClass([object class]);
-    
-    NSDictionary *objectDetails = self.managedObjects[className];
-    if ([objectDetails count] == 0) {
-        NSLog(@"Unable to delete an object of a class not managed");
-        return;
-    }
-    
-    NSString *tableName = objectDetails[TableNameKey];
-    if ([tableName length] == 0) {
-        NSLog(@"Unable to delete an object that don't have a table name");
-        return;
-    }
-    
-    NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = (?)",
-                       tableName, DTSObjectIdKey];
-    
-    NSNumber *objectId = object.objectId;
-    
-    BOOL ok = [self.db executeUpdate:query, objectId];
-    
-    if (!ok) {
-        NSLog(@"%@", [self.db lastError]);
-    }
-}
-
-- (NSArray *)arrayWithIdsFromClass:(Class)class
-{
-    if (class == nil) {
-        NSLog(@"Unable to load indexes without the class");
-        return nil;
-    }
+    NSParameterAssert(class);
+    NSParameterAssert([class isSubclassOfClass:[DTSObject class]]);
     
     NSString *className = NSStringFromClass(class);
-    NSDictionary *objectDetails = self.managedObjects[className];
-    if ([objectDetails count] == 0) {
-        NSLog(@"Unable to load indexes of a class not managed");
-        return nil;
-    }
     
-    NSString *tableName = objectDetails[TableNameKey];
-    if ([tableName length] == 0) {
-        NSLog(@"Unable to load indexes that don't have a table name");
-        return nil;
-    }
+    NSString *tableName = [class tableName];
     
-    NSMutableArray *array = nil;
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@",
-                       tableName];
-    FMResultSet *rs = [self.db executeQuery:query];
-    
-    NSInteger count = 0;
-    while ([rs next]) {
-        count = [rs intForColumnIndex:0];
-    }
-    array = [NSMutableArray arrayWithCapacity:count];
-    
-    query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
-             DTSObjectIdKey, tableName];
-    
-    rs = [self.db executeQuery:query];
-    while ([rs next]) {
-        [array addObject:[rs objectForColumnName:DTSObjectIdKey]];
-    }
-    
-    return [array count] ? array : nil;
-}
-
-#pragma mark - Private Methods
-
-- (instancetype)initWithDbPath:(NSString *)dbFilePath
-{
-#warning TODO
-    NSDictionary *managedObjects = @{@"bla": [DTSObject class]};
+    NSDictionary *properties = [class propertiesTypes];
     
     
-    //      Support to custom properties
-    SerializePropertyBlock dateSerialize;
-    dateSerialize = ^void(NSString *property,
-                          id object,
-                          NSMutableDictionary *parameters){
-        NSDate *date = [object valueForKey:property];
-        if (date) {
-            [parameters setObject:@([date timeIntervalSince1970])
-                           forKey:property];
-        }
-    };
+    NSDictionary *values = @{TableNameKey: tableName,
+                             PropertiesKey: properties};
     
-    SerializePropertyBlock nsURLSerialize;
-    nsURLSerialize = ^void(NSString *property,
-                           id object,
-                           NSMutableDictionary *parameters){
-        NSURL *url = [object valueForKey:property];
-        if (url) {
-            [parameters setObject:[url absoluteString] forKey:property];
-        }
-    };
-    
-    NSDictionary *typesBlockIn;
-    typesBlockIn = @{@"NSDate": [dateSerialize copy],
-                     @"NSURL": [nsURLSerialize copy]};
-    
-    
-    DeserializePropertyBlock dateDeserialize;
-    dateDeserialize = ^void(NSString *property,
-                            FMResultSet *rs,
-                            id object) {
-        if ([rs columnIsNull:property] == NO) {
-            id value = [rs dateForColumn:property];
-            [object setValue:value forKey:property];
-        }
-    };
-    
-    DeserializePropertyBlock nsURLDeserialize;
-    nsURLDeserialize = ^void(NSString *property,
-                             FMResultSet *rs,
-                             id object) {
-        if ([rs columnIsNull:property] == NO) {
-            NSURL *url = [NSURL URLWithString:[rs stringForColumn:property]];
-            if (url) {
-                [object setValue:url forKeyPath:property];
-            }
-        }
-    };
-    
-    NSDictionary *typesBlockOut;
-    typesBlockOut = @{@"NSDate": [dateDeserialize copy],
-                      @"NSURL": [nsURLDeserialize copy]};
-    
-    return [self initWithDBPath:dbFilePath
-                 managedObjects:managedObjects
-       customTypesSerialization:typesBlockIn
-     customTypesDeserialization:typesBlockOut];
-}
-
-- (instancetype)initWithDBPath:(NSString *)dbFilePath
-                managedObjects:(NSDictionary *)managedObjects
-      customTypesSerialization:(NSDictionary *)typesSerializations
-    customTypesDeserialization:(NSDictionary *)typesDeserializations
-{
-    self = [super init];
-    
-    if (self) {
-        _arrayFormatterComma = [TTTArrayFormatter new];
-        _arrayFormatterComma.arrayStyle = TTTArrayFormatterDataStyle;
-        _arrayFormatterComma.separator = @" ";
-        _arrayFormatterComma.delimiter = @",";
-        _arrayFormatterComma.conjunction = @"";
-        _arrayFormatterComma.abbreviatedConjunction = @"";
-        _arrayFormatterAND = [TTTArrayFormatter new];
-        _arrayFormatterAND.arrayStyle = TTTArrayFormatterDataStyle;
-        _arrayFormatterAND.separator = @" ";
-        _arrayFormatterAND.delimiter = @" AND ";
-        _arrayFormatterAND.conjunction = @"";
-        _arrayFormatterAND.abbreviatedConjunction = @"";
-        _dbFilePath = dbFilePath;
-        
-        _managedObjects = [self prepareManagedObjectsDict:managedObjects];
-        _typesBlockIn = typesSerializations;
-        _typesBlockOut = typesDeserializations;
-    }
-    
-    return self;
-}
-
-- (NSDictionary *)prepareManagedObjectsDict:(NSDictionary *)tablesAndClasses
-{
-    NSArray *tables = [tablesAndClasses allKeys];
-    
-    NSMutableDictionary *managedObjects = [NSMutableDictionary dictionaryWithCapacity:[tables count]];
-    
-    for (NSString *table in tables) {
-        Class class = tablesAndClasses[table];
-        NSString *className = NSStringFromClass(class);
-        if ([className length] == 0) {
-            NSLog(@"Undefined class name");
-            continue;
-        }
-        NSDictionary *values = @{TableNameKey: table,
-                                 PropertiesKey: [class propertiesTypes]};
-        [managedObjects setObject:values forKey:className];
-    }
-    
-    return managedObjects;
+    self.managedClasses[className] = values;
+    [class setDbManager:self];
 }
 
 - (void)openDataBaseAtPath:(NSString *)dbFilePath
@@ -411,6 +206,7 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     };
     
     self.db = nil;
+    self.dbFilePath = nil;
     
     return error;
 }
@@ -426,9 +222,189 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     }
     
     self.db = nil;
+    self.dbFilePath = nil;
     
     return error;
 }
+
+- (void)saveObject:(DTSObject *)object
+{
+    if (object == nil) {
+        NSLog(@"Unable to save a nil object");
+        return;
+    }
+    
+    NSNumber *objectId = object.objectId;
+    
+    NSString *className = NSStringFromClass([object class]);
+    NSDictionary *objectDetails = self.managedClasses[className];
+    if ([objectDetails count] == 0) {
+        NSLog(@"Unable to save an object of a class not managed");
+        return;
+    }
+    
+    NSString *tableName = objectDetails[TableNameKey];
+    if ([tableName length] == 0) {
+        NSLog(@"Unable to save an object that don't have a table name");
+        return;
+    }
+    
+    NSDictionary *properties = objectDetails[PropertiesKey];
+    if ([properties count] == 0) {
+        NSLog(@"Unable to save an object that don't have properties");
+        return;
+    }
+    
+    if (objectId) {
+        NSDictionary *where = @{DTSObjectIdKey: objectId};
+        NSError *error = [self updateObject:object
+                                      table:tableName
+                                      where:where
+                                 properties:properties];
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    } else {
+        NSError *error = [self insertObject:object
+                                      table:tableName
+                                 properties:properties];
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }
+}
+
+- (id)newObjectWithId:(NSNumber *)objectId objectClass:(Class)class
+{
+    if (objectId == nil) {
+        NSLog(@"Unable to load an object without objectId");
+        return nil;
+    }
+    
+    if (class == nil) {
+        NSLog(@"Unable to load an object without the class");
+        return nil;
+    }
+    
+    NSString *className = NSStringFromClass(class);
+    NSDictionary *objectDetails = self.managedClasses[className];
+    if ([objectDetails count] == 0) {
+        NSLog(@"Unable to load an object of a class not managed");
+        return nil;
+    }
+    
+    NSString *tableName = objectDetails[TableNameKey];
+    if ([tableName length] == 0) {
+        NSLog(@"Unable to load an object that don't have a table name");
+        return nil;
+    }
+    
+    NSDictionary *properties = objectDetails[PropertiesKey];
+    if ([properties count] == 0) {
+        NSLog(@"Unable to load an object that don't have properties");
+        return nil;
+    }
+    
+    NSString *query;
+    query = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = (?)",
+             tableName, DTSObjectIdKey];
+    
+    id object = nil;
+    
+    FMResultSet *rs = [self.db executeQuery:query, objectId];
+    
+    if ([rs next]) {
+        object = [self newObjectOfClass:class
+                                withRow:rs
+                             properties:properties];
+        [object setValue:objectId forKey:DTSObjectIdKey];
+    }
+    
+    if (object == nil) {
+        NSLog(@"Object %@ with %@ = %@ not found",
+               className, DTSObjectIdKey, objectId);
+    }
+    
+    return object;
+}
+
+- (void)deleteObject:(DTSObject *)object
+{
+    if (object == nil) {
+        NSLog(@"Unable to delete a nil object");
+        return;
+    }
+    
+    NSString *className = NSStringFromClass([object class]);
+    
+    NSDictionary *objectDetails = self.managedClasses[className];
+    if ([objectDetails count] == 0) {
+        NSLog(@"Unable to delete an object of a class not managed");
+        return;
+    }
+    
+    NSString *tableName = objectDetails[TableNameKey];
+    if ([tableName length] == 0) {
+        NSLog(@"Unable to delete an object that don't have a table name");
+        return;
+    }
+    
+    NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = (?)",
+                       tableName, DTSObjectIdKey];
+    
+    NSNumber *objectId = object.objectId;
+    
+    BOOL ok = [self.db executeUpdate:query, objectId];
+    
+    if (!ok) {
+        NSLog(@"%@", [self.db lastError]);
+    }
+}
+
+- (NSArray *)arrayWithIdsFromClass:(Class)class
+{
+    if (class == nil) {
+        NSLog(@"Unable to load indexes without the class");
+        return nil;
+    }
+    
+    NSString *className = NSStringFromClass(class);
+    NSDictionary *objectDetails = self.managedClasses[className];
+    if ([objectDetails count] == 0) {
+        NSLog(@"Unable to load indexes of a class not managed");
+        return nil;
+    }
+    
+    NSString *tableName = objectDetails[TableNameKey];
+    if ([tableName length] == 0) {
+        NSLog(@"Unable to load indexes that don't have a table name");
+        return nil;
+    }
+    
+    NSMutableArray *array = nil;
+    
+    NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@",
+                       tableName];
+    FMResultSet *rs = [self.db executeQuery:query];
+    
+    NSInteger count = 0;
+    while ([rs next]) {
+        count = [rs intForColumnIndex:0];
+    }
+    array = [NSMutableArray arrayWithCapacity:count];
+    
+    query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
+             DTSObjectIdKey, tableName];
+    
+    rs = [self.db executeQuery:query];
+    while ([rs next]) {
+        [array addObject:[rs objectForColumnName:DTSObjectIdKey]];
+    }
+    
+    return [array count] ? array : nil;
+}
+
+#pragma mark - Private Methods
 
 - (NSError *)insertObject:(id)object
                     table:(NSString *)table

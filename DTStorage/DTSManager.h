@@ -30,12 +30,14 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
 
 // Optional
 - (void)addSerializationBlock:(DTSManagerTypeSerializationBlock)sBlock
-         deserializationBlocl:(DTSManagerTypeDeserializationBlock)dBlock
+         deserializationBlock:(DTSManagerTypeDeserializationBlock)dBlock
                      forClass:(Class)class;
 
-- (void)addManagedClass:(Class)class tableName:(NSString *)tableName;
+- (void)addManagedClass:(Class)class;
+
 - (void)openDataBaseAtPath:(NSString *)dbFilePath
                 withSchema:(DTSManagerSchemaBlock)schemaBlock;
+
 - (NSError *)closeDataBase;
 
 - (NSError *)deleteDataBase;

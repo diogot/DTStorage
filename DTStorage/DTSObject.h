@@ -14,11 +14,11 @@
 
 + (NSDictionary *)propertiesTypes;
 
-+ (NSArray *)arrayWithObjectIds;
-+ (instancetype)newObjectWithId:(NSNumber *)objectId;
++ (NSString *)tableName;
 
-- (instancetype)init
-__attribute((objc_designated_initializer));
++ (NSArray *)arrayWithObjectIds;
+
++ (instancetype)newObjectWithId:(NSNumber *)objectId;
 
 - (void)save;
 - (void)delete;

@@ -47,6 +47,7 @@
 		0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTStorage.xcconfig"; path = "Pods/Pods-DTStorage.xcconfig"; sourceTree = "<group>"; };
 		2634738AAD9C4FC6B270E50F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA34ED06BA64030AA1AF07E /* libPods-DTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DTStorage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D93C5C3C192C3E2A009196EA /* DTSObject_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTSObject_Private.h; sourceTree = "<group>"; };
 		D97871D819206ACE00D280B4 /* libDTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDTStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D97871DB19206ACE00D280B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D97871DF19206ACE00D280B4 /* DTStorage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "DTStorage-Prefix.pch"; path = "Supporting Files/DTStorage-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -131,6 +132,7 @@
 				D978720719206BD900D280B4 /* DTSManager_Private.h */,
 				D978720219206B4D00D280B4 /* DTSManager.m */,
 				D978720419206B7F00D280B4 /* DTSObject.h */,
+				D93C5C3C192C3E2A009196EA /* DTSObject_Private.h */,
 				D978720519206B7F00D280B4 /* DTSObject.m */,
 			);
 			path = DTStorage;
