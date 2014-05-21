@@ -22,8 +22,8 @@
 
 + (NSDictionary *)propertiesTypes
 {
-    return @{@"string": @"NSString",
-             @"number": @"NSNumber"};
+    return @{@"string": NSStringFromClass([NSString class]),
+             @"number": NSStringFromClass([NSNumber class])};
 }
 
 + (NSString *)tableName
@@ -266,7 +266,10 @@
     obj2.number = @(43);
     [self.manager saveObject:obj2];
     
-    NSArray *ids = [self.manager arrayWithIdsFromClass:[ObjectTest class]];
+    NSArray *ids = [self.manager arrayWithIdsFromClass:[ObjectTest class]
+                                         whereProperty:nil
+                                              hasValue:nil
+                                             orderDesc:NO];
     
     XCTAssertEqual([ids count], 2, @"");
     XCTAssertEqualObjects(ids[0], @(1), @"");

@@ -124,8 +124,21 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     
     NSString *className = NSStringFromClass(class);
     
-    self.typesBlockIn[className] = sBlock;
-    self.typesBlockOut[className] = dBlock;
+    [self addSerializationBlock:sBlock
+           deserializationBlock:dBlock
+                        forType:className];
+}
+
+- (void)addSerializationBlock:(DTSManagerTypeSerializationBlock)sBlock
+         deserializationBlock:(DTSManagerTypeDeserializationBlock)dBlock
+                      forType:(NSString *)typeName
+{
+    NSParameterAssert(sBlock);
+    NSParameterAssert(dBlock);
+    NSParameterAssert([typeName length]);
+
+    self.typesBlockIn[typeName] = sBlock;
+    self.typesBlockOut[typeName] = dBlock;
 }
 
 - (void)addManagedClass:(Class)class
@@ -149,20 +162,30 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
 
 - (void)openDataBaseAtPath:(NSString *)dbFilePath
                 withSchema:(DTSManagerSchemaBlock)schemaBlock
+                       key:(NSString *)key
 {
     FMDatabase *db = [FMDatabase databaseWithPath:dbFilePath];
-    self.db = db;
-    self.dbFilePath = dbFilePath;
-    
+
     BOOL ok;
     NSError *error = nil;
-    
+
+// TODO: improve error handling
+
     ok = [db open];
     if (ok) {
+        if ([key length]) {
+            [db setKey:key];
+            if ([db executeStatements:@"SELECT count(*) FROM sqlite_master;"] == NO) {
+                error = [db lastError];
+                NSLog(@"%@", error);
+                return;
+            }
+        }
         ok = [db executeUpdate:@"PRAGMA foreign_keys=ON"];
         if (!ok) {
             error = [db lastError];
             NSLog(@"%@", error);
+            return;
         }
         int version = [self databaseSchemaVersion:db];
         schemaBlock(db,&version);
@@ -170,11 +193,19 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     } else {
         error = [db lastError];
         NSLog(@"%@", error);
+        return;
     }
-    
-    if (error) {
-        self.db = nil;
-    }
+
+    self.db = db;
+    self.dbFilePath = dbFilePath;
+}
+
+- (void)openDataBaseAtPath:(NSString *)dbFilePath
+                withSchema:(DTSManagerSchemaBlock)schemaBlock
+{
+    [self openDataBaseAtPath:dbFilePath
+                  withSchema:schemaBlock
+                         key:nil];
 }
 
 - (int)databaseSchemaVersion:(FMDatabase *)db
@@ -362,41 +393,70 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
 }
 
 - (NSArray *)arrayWithIdsFromClass:(Class)class
+                     whereProperty:(NSString *)property
+                          hasValue:(id)value
+                         orderDesc:(BOOL)isDesc
 {
     if (class == nil) {
         NSLog(@"Unable to load indexes without the class");
         return nil;
     }
-    
+
     NSString *className = NSStringFromClass(class);
     NSDictionary *objectDetails = self.managedClasses[className];
     if ([objectDetails count] == 0) {
         NSLog(@"Unable to load indexes of a class not managed");
         return nil;
     }
-    
+
     NSString *tableName = objectDetails[TableNameKey];
     if ([tableName length] == 0) {
         NSLog(@"Unable to load indexes that don't have a table name");
         return nil;
     }
-    
+
+    NSString *where = nil;
+    if ([property length] > 0) {
+        if(objectDetails[PropertiesKey][property] == nil){
+            NSLog(@"Property %@ are not stored for the class %@", property, className);
+            return nil;
+        }
+
+        if (value == nil) {
+            NSLog(@"Property value can not be nil");
+            return nil;
+        }
+
+        where = [NSString stringWithFormat:@" WHERE %@ = ?", property];
+    }
+
     NSMutableArray *array = nil;
-    
+
     NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@",
                        tableName];
+
     FMResultSet *rs = [self.db executeQuery:query];
-    
     NSInteger count = 0;
     while ([rs next]) {
         count = [rs intForColumnIndex:0];
     }
     array = [NSMutableArray arrayWithCapacity:count];
-    
+
     query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
              DTSObjectIdKey, tableName];
-    
-    rs = [self.db executeQuery:query];
+    if ([where length]) {
+        query = [query stringByAppendingString:where];
+        if (isDesc) {
+            query = [query stringByAppendingFormat:@" ORDER BY %@ DESC", DTSObjectIdKey];
+        }
+        rs = [self.db executeQuery:query, value];
+    } else {
+        if (isDesc) {
+            query = [query stringByAppendingFormat:@" ORDER BY %@ DESC", DTSObjectIdKey];
+        }
+        rs = [self.db executeQuery:query];
+    }
+
     while ([rs next]) {
         [array addObject:[rs objectForColumnName:DTSObjectIdKey]];
     }
@@ -404,6 +464,14 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     return [array count] ? array : nil;
 }
 
+- (FMDatabase *)db
+{
+    if (_db == nil) {
+        NSLog(@"WARNING: _db is nil");
+    }
+
+    return _db;
+}
 #pragma mark - Private Methods
 
 - (NSError *)insertObject:(id)object

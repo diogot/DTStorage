@@ -116,11 +116,33 @@ static void SetDBManager(DTSManager *dbManager)
 
 + (NSArray *)arrayWithObjectIds
 {
-    NSArray *array = [[DTSObject dbManager] arrayWithIdsFromClass:self];
-    
+    NSArray *array = [[DTSObject dbManager] arrayWithIdsFromClass:self
+                                                    whereProperty:nil
+                                                         hasValue:nil
+                                                        orderDesc:NO];
     return array;
 }
 
++ (NSArray *)arrayWithObjectIdsDesc
+{
+    NSArray *array = [[DTSObject dbManager] arrayWithIdsFromClass:[self class]
+                                                    whereProperty:nil
+                                                         hasValue:nil
+                                                        orderDesc:YES];
+
+    return array;
+}
+
++ (NSArray *)arrayWithIdsWhereProperty:(NSString *)property
+                              hasValue:(id)value
+{
+    NSArray *array = [[DTSObject dbManager] arrayWithIdsFromClass:[self class]
+                                                    whereProperty:property
+                                                         hasValue:value
+                                                        orderDesc:NO];
+
+    return array;
+}
 
 - (NSString *)debugDescription
 {

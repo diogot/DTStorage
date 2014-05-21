@@ -17,6 +17,9 @@
 + (NSString *)tableName;
 
 + (NSArray *)arrayWithObjectIds;
++ (NSArray *)arrayWithObjectIdsDesc;
++ (NSArray *)arrayWithIdsWhereProperty:(NSString *)property
+                              hasValue:(id)value;
 
 + (instancetype)newObjectWithId:(NSNumber *)objectId;
 

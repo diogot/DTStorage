@@ -33,10 +33,19 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
          deserializationBlock:(DTSManagerTypeDeserializationBlock)dBlock
                      forClass:(Class)class;
 
+- (void)addSerializationBlock:(DTSManagerTypeSerializationBlock)sBlock
+         deserializationBlock:(DTSManagerTypeDeserializationBlock)dBlock
+                      forType:(NSString *)typeName;
+
+
 - (void)addManagedClass:(Class)class;
 
 - (void)openDataBaseAtPath:(NSString *)dbFilePath
                 withSchema:(DTSManagerSchemaBlock)schemaBlock;
+
+- (void)openDataBaseAtPath:(NSString *)dbFilePath
+                withSchema:(DTSManagerSchemaBlock)schemaBlock
+                       key:(NSString *)key;
 
 - (NSError *)closeDataBase;
 
@@ -45,6 +54,9 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
 - (void)saveObject:(DTSObject *)object;
 - (instancetype)newObjectWithId:(NSNumber *)objectId objectClass:(Class)class;
 - (void)deleteObject:(DTSObject *)object;
-- (NSArray *)arrayWithIdsFromClass:(Class)class;
+- (NSArray *)arrayWithIdsFromClass:(Class)class
+                     whereProperty:(NSString *)property
+                          hasValue:(id)value
+                         orderDesc:(BOOL)isDesc;
 
 @end
