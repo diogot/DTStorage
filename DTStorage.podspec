@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DTStorage"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "A simple storage layer over SQLite for iOS."
   s.homepage     = "https://github.com/diogot/DTStorage"
   s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -15,17 +15,15 @@ Pod::Spec.new do |s|
     
   s.default_subspec = 'standard'
 
-# TODO: source_files and private_header_files in a global scope
+# TODO: source_files in a global scope
 
   s.subspec 'standard' do |ss|
     ss.source_files = "DTStorage/*.{h,m}"
-    ss.private_header_files = "DTStorage/*_Private.h"    
     ss.dependency 'FMDB'
   end
   
   s.subspec 'SQLCipher' do |ss|
     ss.source_files = "DTStorage/*.{h,m}"
-    ss.private_header_files = "DTStorage/*_Private.h"    
     ss.dependency 'FMDB/SQLCipher'
   end
 

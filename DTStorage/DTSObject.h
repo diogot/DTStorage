@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@class DTSManager;
+
 @interface DTSObject : NSObject
 
 @property (nonatomic, readonly) NSNumber *objectId;
 
-+ (NSDictionary *)propertiesTypes;
++ (DTSManager *)dbManager;
 
++ (NSDictionary *)propertiesTypes;
 + (NSString *)tableName;
 
 + (NSArray *)arrayWithObjectIds;

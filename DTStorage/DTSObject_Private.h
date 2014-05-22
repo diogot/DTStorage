@@ -12,7 +12,6 @@
 
 @interface DTSObject ()
 
-+ (DTSManager *)dbManager;
 + (void)setDbManager:(DTSManager *)manager;
 
 @end

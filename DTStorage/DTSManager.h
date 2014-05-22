@@ -26,6 +26,8 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
 
 @interface DTSManager : NSObject
 
+@property (nonatomic, strong) FMDatabase *db;
+
 + (instancetype)sharedManager;
 
 // Optional

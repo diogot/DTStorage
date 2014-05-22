@@ -12,7 +12,6 @@
 
 @interface DTSManager ()
 
-@property (nonatomic, strong) FMDatabase *db;
 @property (nonatomic, strong) NSString *dbFilePath;
 
 - (NSError *)insertObject:(id)object
