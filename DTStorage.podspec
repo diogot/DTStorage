@@ -11,22 +11,21 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   s.framework    = 'SystemConfiguration'
   s.requires_arc = true
-  
+  s.dependency 'FormatterKit/ArrayFormatter'
+    
   s.default_subspec = 'standard'
 
-  s.subspec 'common' do |ss|
-    ss.source_files = "DTStorage/*.{h,m}"
-    ss.private_header_files = "DTStorage/*_Private.h"    
-    ss.dependency 'FormatterKit/ArrayFormatter'
-  end
+# TODO: source_files and private_header_files in a global scope
 
   s.subspec 'standard' do |ss|
-    ss.dependency 'DTStorage/common'
+    ss.source_files = "DTStorage/*.{h,m}"
+    ss.private_header_files = "DTStorage/*_Private.h"    
     ss.dependency 'FMDB'
   end
-
+  
   s.subspec 'SQLCipher' do |ss|
-    ss.dependency 'DTStorage/common'
+    ss.source_files = "DTStorage/*.{h,m}"
+    ss.private_header_files = "DTStorage/*_Private.h"    
     ss.dependency 'FMDB/SQLCipher'
   end
 
