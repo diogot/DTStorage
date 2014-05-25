@@ -305,7 +305,7 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     }
 }
 
-- (id)newObjectWithId:(NSNumber *)objectId objectClass:(Class)class
+- (id)objectWithId:(NSNumber *)objectId objectClass:(Class)class
 {
     if (objectId == nil) {
         NSLog(@"Unable to load an object without objectId");

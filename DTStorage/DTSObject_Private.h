@@ -12,6 +12,12 @@
 
 @interface DTSObject ()
 
+/**
+ *  Private method to set the DTSManager used by the class. This method can be
+ *   used for dependency injection on tests.
+ *
+ *  @param manager DTSManager that should be used by the class.
+ */
 + (void)setDbManager:(DTSManager *)manager;
 
 @end

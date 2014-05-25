@@ -101,15 +101,15 @@ static void SetDBManager(DTSManager *dbManager)
     [[DTSObject dbManager] deleteObject:self];
 }
 
-+ (instancetype)newObjectWithId:(NSNumber *)objectId
++ (instancetype)objectWithId:(NSNumber *)objectId
 {
     if (objectId == nil) {
         NSLog(@"Undefined %@", DTSObjectIdKey);
         return nil;
     }
     
-    id object = [[DTSObject dbManager] newObjectWithId:objectId
-                                           objectClass:[self class]];
+    id object = [[DTSObject dbManager] objectWithId:objectId
+                                        objectClass:[self class]];
     
     return object;
 }

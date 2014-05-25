@@ -183,8 +183,8 @@
     
     
     ObjectTest *result;
-    result = (ObjectTest *)[self.manager newObjectWithId:@(1)
-                                             objectClass:[ObjectTest class]];
+    result = (ObjectTest *)[self.manager objectWithId:@(1)
+                                          objectClass:[ObjectTest class]];
     XCTAssertNotNil(result, @"");
     XCTAssertEqualObjects(result.objectId, @(1), @"");
     XCTAssertEqualObjects(result.string, @"bla", @"");

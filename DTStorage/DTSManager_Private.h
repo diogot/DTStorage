@@ -12,6 +12,9 @@
 
 @interface DTSManager ()
 
+/**
+ *  Private property with the database file path.
+ */
 @property (nonatomic, strong) NSString *dbFilePath;
 
 - (NSError *)insertObject:(id)object
