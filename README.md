@@ -3,7 +3,7 @@ DTStorage
 
 A library for data persistence on iOS that uses SQLite (with FMDB).
 I ([Diogo Tridapalli](http://twitter.com/diogot)) started to develop this lib for the iOS app of [99Taxis](http://99taxis.com).
-Still are under development but it's functional.
+Still is under development but it's functional.
 
 ## A bit of History
 
