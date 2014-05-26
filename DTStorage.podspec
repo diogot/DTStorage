@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "DTStorage"
-  s.version      = "0.0.3"
-  s.summary      = "A simple storage layer over SQLite for iOS."
+  s.version      = "0.1.0"
+  s.summary      = "A library for data persistence on iOS that uses SQLite (with FMDB)."
   s.homepage     = "https://github.com/diogot/DTStorage"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author             = { "Diogo Tridapalli" => "diogo@diogot.com" }
