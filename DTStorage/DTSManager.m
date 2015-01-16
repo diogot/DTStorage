@@ -9,10 +9,12 @@
 #import "DTSManager_Private.h"
 #import "DTSObject_Private.h"
 #import <FMDB.h>
-#import <TTTArrayFormatter.h>
 
 static NSString * const TableNameKey = @"TableName";
 static NSString * const PropertiesKey = @"Properties";
+
+static NSString * const kCommaSeparator = @", ";
+static NSString * const kANDSeparator = @" AND ";
 
 typedef void (^SerializePropertyBlock)(NSString *property,
                                        id object,
@@ -23,9 +25,6 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
                                          id object);
 
 @interface DTSManager ()
-
-@property (nonatomic, strong) TTTArrayFormatter *arrayFormatterComma;
-@property (nonatomic, strong) TTTArrayFormatter *arrayFormatterAND;
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *managedClasses;
 
@@ -43,18 +42,6 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
 {
     self = [super init];
     if (self) {
-        _arrayFormatterComma = [TTTArrayFormatter new];
-        _arrayFormatterComma.arrayStyle = TTTArrayFormatterDataStyle;
-        _arrayFormatterComma.separator = @" ";
-        _arrayFormatterComma.delimiter = @",";
-        _arrayFormatterComma.conjunction = @"";
-        _arrayFormatterComma.abbreviatedConjunction = @"";
-        _arrayFormatterAND = [TTTArrayFormatter new];
-        _arrayFormatterAND.arrayStyle = TTTArrayFormatterDataStyle;
-        _arrayFormatterAND.separator = @" ";
-        _arrayFormatterAND.delimiter = @" AND ";
-        _arrayFormatterAND.conjunction = @"";
-        _arrayFormatterAND.abbreviatedConjunction = @"";
         _dbFilePath = nil;
 
         _typesBlockIn = [NSMutableDictionary dictionaryWithCapacity:10];
@@ -487,8 +474,8 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
         [placeholders addObject:[@":" stringByAppendingString:obj]];
     }];
     
-    NSString *columns = [self.arrayFormatterComma stringFromArray:keys];
-    NSString *values = [self.arrayFormatterComma stringFromArray:placeholders];
+    NSString *columns =  [keys componentsJoinedByString:kCommaSeparator];
+    NSString *values = [placeholders componentsJoinedByString:kCommaSeparator];
     
     NSString *query;
     query = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)",
@@ -518,10 +505,10 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
                                                properties:properties];
     
     NSArray *parColumnsArray = [self arrayWithColumnsEqualValuesFromDictKeys:parameters];
-    NSString *parColumns = [self.arrayFormatterComma stringFromArray:parColumnsArray];
+    NSString *parColumns = [parColumnsArray componentsJoinedByString:kCommaSeparator];
     
     NSArray *whereColumnsArray = [self arrayWithColumnsEqualValuesFromDictKeys:where];
-    NSString *whereColumns = [self.arrayFormatterAND stringFromArray:whereColumnsArray];
+    NSString *whereColumns = [whereColumnsArray componentsJoinedByString:kANDSeparator];
     
     NSString *query;
     query = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",

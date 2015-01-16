@@ -22,7 +22,6 @@ Suggestions are welcome, feel free to contact me on [twitter](http://twitter.com
 * iOS 6 or later
 * ARQ
 * [FMDB](https://github.com/ccgus/fmdb)
-* [FormatterKit](https://github.com/mattt/FormatterKit)
 
 ## Example
 

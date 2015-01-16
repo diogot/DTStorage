@@ -11,7 +11,6 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   s.framework    = 'SystemConfiguration'
   s.requires_arc = true
-  s.dependency 'FormatterKit/ArrayFormatter'
     
   s.default_subspec = 'standard'
 

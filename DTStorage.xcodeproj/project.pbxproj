@@ -44,8 +44,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTStorage.xcconfig"; path = "Pods/Pods-DTStorage.xcconfig"; sourceTree = "<group>"; };
 		2634738AAD9C4FC6B270E50F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3426FF24338722D2D68000C9 /* Pods-DTStorage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTStorage.release.xcconfig"; path = "Pods/Target Support Files/Pods-DTStorage/Pods-DTStorage.release.xcconfig"; sourceTree = "<group>"; };
 		BBA34ED06BA64030AA1AF07E /* libPods-DTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DTStorage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93C5C3C192C3E2A009196EA /* DTSObject_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTSObject_Private.h; sourceTree = "<group>"; };
 		D97871D819206ACE00D280B4 /* libDTStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDTStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +64,7 @@
 		D978720519206B7F00D280B4 /* DTSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTSObject.m; sourceTree = "<group>"; };
 		D978720719206BD900D280B4 /* DTSManager_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTSManager_Private.h; sourceTree = "<group>"; };
 		D9A256141921C15700CBEB39 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DA0D8C99F7DD3F3D75AD6248 /* Pods-DTStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTStorage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DTStorage/Pods-DTStorage.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +91,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E32A08682F69D1623715A4B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DA0D8C99F7DD3F3D75AD6248 /* Pods-DTStorage.debug.xcconfig */,
+				3426FF24338722D2D68000C9 /* Pods-DTStorage.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D97871CF19206ACE00D280B4 = {
 			isa = PBXGroup;
 			children = (
@@ -98,7 +108,7 @@
 				D97871F119206ACE00D280B4 /* DTStorageTests */,
 				D97871DA19206ACE00D280B4 /* Frameworks */,
 				D97871D919206ACE00D280B4 /* Products */,
-				0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */,
+				7E32A08682F69D1623715A4B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -271,7 +281,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-DTStorage-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DTStorage/Pods-DTStorage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -388,7 +398,7 @@
 		};
 		D97871FC19206ACE00D280B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			baseConfigurationReference = DA0D8C99F7DD3F3D75AD6248 /* Pods-DTStorage.debug.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/DTStorage.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -401,7 +411,7 @@
 		};
 		D97871FD19206ACE00D280B4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			baseConfigurationReference = 3426FF24338722D2D68000C9 /* Pods-DTStorage.release.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/DTStorage.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -414,7 +424,7 @@
 		};
 		D97871FF19206ACE00D280B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
+			baseConfigurationReference = DA0D8C99F7DD3F3D75AD6248 /* Pods-DTStorage.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -435,7 +445,6 @@
 		};
 		D978720019206ACE00D280B4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED59E23DEC744D79711BF96 /* Pods-DTStorage.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
