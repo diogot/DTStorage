@@ -147,32 +147,38 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     [class setDbManager:self];
 }
 
-- (void)openDataBaseAtPath:(NSString *)dbFilePath
-                withSchema:(DTSManagerSchemaBlock)schemaBlock
-                       key:(NSString *)key
+- (NSError *)openDataBaseAtPath:(NSString *)dbFilePath
+                     withSchema:(DTSManagerSchemaBlock)schemaBlock
+                            key:(NSString *)key
 {
     FMDatabase *db = [FMDatabase databaseWithPath:dbFilePath];
+    self.dbFilePath = dbFilePath;
 
     BOOL ok;
     NSError *error = nil;
 
 // TODO: improve error handling
-
     ok = [db open];
     if (ok) {
         if ([key length]) {
-            [db setKey:key];
-            if ([db executeStatements:@"SELECT count(*) FROM sqlite_master;"] == NO) {
+            ok = [db setKey:key];
+            if (!ok) {
                 error = [db lastError];
                 NSLog(@"%@", error);
-                return;
+                return error;
+            }
+            ok = [db goodConnection];
+            if (!ok) {
+                error = [db lastError];
+                NSLog(@"%@", error);
+                return error;
             }
         }
         ok = [db executeUpdate:@"PRAGMA foreign_keys=ON"];
         if (!ok) {
             error = [db lastError];
             NSLog(@"%@", error);
-            return;
+            return error;
         }
         int version = [self databaseSchemaVersion:db];
         schemaBlock(db,&version);
@@ -180,19 +186,20 @@ typedef void (^DeserializePropertyBlock)(NSString *property,
     } else {
         error = [db lastError];
         NSLog(@"%@", error);
-        return;
+        return error;
     }
 
     self.db = db;
-    self.dbFilePath = dbFilePath;
+
+    return error;
 }
 
-- (void)openDataBaseAtPath:(NSString *)dbFilePath
-                withSchema:(DTSManagerSchemaBlock)schemaBlock
+- (NSError *)openDataBaseAtPath:(NSString *)dbFilePath
+                     withSchema:(DTSManagerSchemaBlock)schemaBlock
 {
-    [self openDataBaseAtPath:dbFilePath
-                  withSchema:schemaBlock
-                         key:nil];
+    return [self openDataBaseAtPath:dbFilePath
+                         withSchema:schemaBlock
+                                key:nil];
 }
 
 - (int)databaseSchemaVersion:(FMDatabase *)db

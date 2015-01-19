@@ -118,10 +118,12 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
  *  @param dbFilePath  NSString with the database file path
  *  @param schemaBlock DTSManagerSchemaBlock
  *
+ *  @return NSError, returns nil if everything is ok.
+ *
  *  @see -openDataBaseAtPath:withSchema:key:
  */
-- (void)openDataBaseAtPath:(NSString *)dbFilePath
-                withSchema:(DTSManagerSchemaBlock)schemaBlock;
+- (NSError *)openDataBaseAtPath:(NSString *)dbFilePath
+                     withSchema:(DTSManagerSchemaBlock)schemaBlock;
 
 /**
  *  This method is used to open an encripted database on the desired path 
@@ -131,11 +133,13 @@ typedef void (^DTSManagerTypeDeserializationBlock)(NSString *key,
  *  @param schemaBlock DTSManagerSchemaBlock
  *  @param key         NSString with database encription key
  *
+ *  @return NSError, returns nil if everything is ok.
+ *
  *  @see -openDataBaseAtPath:withSchema:
  */
-- (void)openDataBaseAtPath:(NSString *)dbFilePath
-                withSchema:(DTSManagerSchemaBlock)schemaBlock
-                       key:(NSString *)key;
+- (NSError *)openDataBaseAtPath:(NSString *)dbFilePath
+                     withSchema:(DTSManagerSchemaBlock)schemaBlock
+                            key:(NSString *)key;
 
 /**
  *  Used to close the database, returns nil if everything is ok.

@@ -37,6 +37,7 @@
 
 @property (nonatomic, strong) DTSManager *manager;
 @property (nonatomic, strong) NSString *dbPath;
+@property (nonatomic, strong) NSString *key;
 
 @end
 
@@ -49,7 +50,9 @@
 
     self.dbPath = [NSTemporaryDirectory() stringByAppendingString:@"test.db"];
     [[NSFileManager defaultManager] removeItemAtPath:self.dbPath error:nil];
-    
+
+    self.key = @"VeryHardKey";
+
     self.manager = [DTSManager new];
     [self.manager addManagedClass:[ObjectTest class]];
 
@@ -77,7 +80,7 @@
             *schemaVersion = 1;
         }
         [db commit];
-    }];
+    } key:self.key];
 }
 
 - (void)tearDown
@@ -102,6 +105,41 @@
     XCTAssertTrue([db columnExists:@"objectId" inTableWithName:@"stuff"], @"");
     XCTAssertTrue([db columnExists:@"string" inTableWithName:@"stuff"], @"");
     XCTAssertTrue([db columnExists:@"number" inTableWithName:@"stuff"], @"");
+}
+
+- (void)testOpenWithKey
+{
+    DTSManager *dbManager = self.manager;
+
+    XCTAssertNil([dbManager closeDataBase]);
+
+    XCTestExpectation *schemaVersionExpectation = [self expectationWithDescription:@"schemaVersion"];
+
+    NSError *error = [dbManager openDataBaseAtPath:self.dbPath
+                                       withSchema:^(FMDatabase *db, int *schemaVersion) {
+                                           XCTAssertEqual(*schemaVersion, 1);
+                                           [schemaVersionExpectation fulfill];
+                                       } key:self.key];
+
+    XCTAssertNil(error);
+
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        XCTAssertNil(error);
+    }];
+}
+
+- (void)testOpenWithWrongKey
+{
+    DTSManager *dbManager = self.manager;
+
+    XCTAssertNil([dbManager closeDataBase]);
+
+    NSError *error = [dbManager openDataBaseAtPath:self.dbPath
+                                        withSchema:^(FMDatabase *db, int *schemaVersion) {
+                                            XCTAssertEqual(*schemaVersion, 1);
+                                        } key:@"bla"];
+
+    XCTAssertNotNil(error);
 }
 
 - (void)testClose
